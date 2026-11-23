@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api.routes import health
+from app.api.routes import behavioural, correlation, health, payment_protection, recipient, unified_risk
 from app.core.config import settings
 
 
@@ -58,6 +58,21 @@ def create_application() -> FastAPI:
 
     # Also mount router under versioned API prefix for future expansion
     app.include_router(health.router, prefix=settings.API_V1_STR)
+
+    # Mount Intent-to-Payment Correlation Router (Phase 2.1)
+    app.include_router(correlation.router, prefix=settings.API_V1_STR)
+
+    # Mount Behavioural Risk Engine Router (Phase 2.2.1 & 2.2.2)
+    app.include_router(behavioural.router, prefix=settings.API_V1_STR)
+
+    # Mount Recipient Risk Intelligence & SPEG Router (Phase 2.3.1 & 2.3.2)
+    app.include_router(recipient.router, prefix=settings.API_V1_STR)
+
+    # Mount Unified Risk Assessment Router (Phase 2.4)
+    app.include_router(unified_risk.router, prefix=settings.API_V1_STR)
+
+    # Mount End-to-End Payment Protection Router (Final MVP Integration)
+    app.include_router(payment_protection.router, prefix=settings.API_V1_STR)
 
     return app
 

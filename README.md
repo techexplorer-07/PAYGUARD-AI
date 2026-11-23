@@ -1,6 +1,7 @@
 # PAYGUARD AI
 
-**Intent-Aware Real-Time Financial Scam Prevention and Payment Intervention System**  
+**Intent-Aware Real-Time Financial Scam Prevention and Payment Intervention System**
+
 *Prototype for Visionet Talent Quest 2026 – Techthon*
 
 ---
@@ -31,9 +32,11 @@ Unlike conventional fraud systems that rely solely on static transactional rules
 
 ---
 
-## 3. Current Implementation Status (Phase 1)
+## 3. Current Implementation Status
 
 **Phase 1: Project Architecture, Environment Setup & Application Foundation** is complete.
+
+**Phase 2.1: Intent-to-Payment Correlation Engine** is implemented and verified.
 
 - [x] Environment inspection and toolchain verification.
 - [x] Standardized repository layout established (`frontend/`, `backend/`, `docs/`, `data/`).
@@ -41,14 +44,15 @@ Unlike conventional fraud systems that rely solely on static transactional rules
 - [x] Branded PAYGUARD AI application shell and landing page with live backend health monitor.
 - [x] FastAPI backend with structured configuration (`core/config.py`) and CORS middleware.
 - [x] Diagnostic health check endpoints (`GET /health` and `GET /api/v1/health`).
-- [x] Pytest suite with automated HTTPX ASGI client tests passing.
+- [x] **Intent-to-Payment Correlation Engine** (`POST /api/v1/correlation/analyze`) with deterministic Context Intelligence extraction, recipient diversion detection, and explainable rule-based risk scoring.
+- [x] Pytest suite with 15 automated integration and scenario tests passing.
 - [x] Complete environment templates (`.env.example`, `frontend/.env.example`) and comprehensive `.gitignore`.
-- [x] Technical architecture (`docs/ARCHITECTURE.md`), development roadmap (`docs/DEVELOPMENT_PLAN.md`), and comprehensive audit report (`docs/reports/PHASE1_AUDIT_REPORT.md`).
+- [x] Technical architecture (`docs/ARCHITECTURE.md`), development roadmap (`docs/DEVELOPMENT_PLAN.md`), audit report (`docs/reports/PHASE1_AUDIT_REPORT.md`), and engine documentation (`docs/PHASE2_1_INTENT_PAYMENT_ENGINE.md`).
 
 > [!IMPORTANT]
 > **Implementation Boundaries:**
-> - Per Phase 1 specifications, no fraud detection engines, database connections, or live payment integrations have been implemented yet.
-> - **PAYGUARD 2.0 has NOT been implemented.** Proposed innovations (evidence graphs, intent correlation, native Android floating assistant) are planned for future phases following core milestones.
+> - Database connections (PostgreSQL) and live payment network integrations will be introduced in subsequent phases per the development plan.
+> - **PAYGUARD 2.0 has NOT been implemented.** Proposed innovations (evidence graphs, Android floating assistant, multilingual code-mixed NLP) are planned for future phases.
 
 ---
 
@@ -135,6 +139,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 The API will be available at:
 - **API Base:** `http://127.0.0.1:8000`
 - **Health Check:** `http://127.0.0.1:8000/health`
+- **Intent Correlation API:** `POST http://127.0.0.1:8000/api/v1/correlation/analyze`
 - **Interactive OpenAPI Docs:** `http://127.0.0.1:8000/docs`
 
 Expected `/health` response:
