@@ -22,6 +22,20 @@ export function formatInr(amount: number): string {
   return inrFormatter.format(amount);
 }
 
+/** Formats an amount in any ISO 4217 currency, falling back to "CODE 1,234.00" for unknown codes. */
+export function formatMoney(amount: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return `${currency} ${amount.toLocaleString('en-IN')}`;
+  }
+}
+
 export function formatDate(iso: string): string {
   return dateFormatter.format(new Date(iso));
 }

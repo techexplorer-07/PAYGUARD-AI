@@ -3,7 +3,11 @@ import type { FormEvent } from 'react';
 import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router';
 import { evaluatePayment, PaymentProtectionApiError } from '../services/paymentProtection';
-import type { AnalysisResultLocationState, ApiValidationIssue } from '../types/paymentProtection';
+import type { AssessmentResultLocationState } from '../types/assessment';
+import type { ApiValidationIssue } from '../types/paymentProtection';
+import { announceAssessment } from '../utils/assessment/highRiskAlert';
+import { recordSessionAssessment } from './useInvestigatorStores';
+import { deriveVerdictKind } from '../utils/assessment/verdict';
 import {
   fieldForApiLocation,
   initialPaymentAnalysisValues,
@@ -92,8 +96,28 @@ export function usePaymentAnalysisForm() {
     setSubmission({ status: 'submitting' });
 
     try {
-      const assessment = await evaluatePayment(toPaymentProtectionRequest(values), controller.signal);
-      const state: AnalysisResultLocationState = { assessment };
+      const request = toPaymentProtectionRequest(values);
+      // evaluatePayment returns only responses that passed runtime validation.
+      const assessment = await evaluatePayment(request, controller.signal);
+
+      // One-time audible alert for this newly completed assessment. Triggered here,
+      // in the submission handler, so it can never replay from a render, effect or refresh.
+      const alertPlayback = await announceAssessment(deriveVerdictKind(assessment.unified_risk_assessment));
+      if (controller.signal.aborted) return;
+
+      const state: AssessmentResultLocationState = {
+        assessment,
+        // The response does not echo amount or currency, so carry what the customer entered.
+        // The message text is deliberately not carried forward.
+        submitted: {
+          amount: request.simulated_transaction.amount,
+          currency: request.simulated_transaction.currency,
+          recipientId: request.simulated_transaction.recipient_id,
+        },
+        alertPlayback,
+      };
+      // Make the real response available to the investigator prototype for this tab (memory only).
+      recordSessionAssessment(assessment, state.submitted);
       navigate('/analyse/result', { state });
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return;

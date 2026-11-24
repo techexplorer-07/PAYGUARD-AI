@@ -1,11 +1,13 @@
-import { ChevronRight, MonitorCog, ReceiptText } from 'lucide-react';
+import { ChevronRight, MonitorCog, ReceiptText, ScanEye } from 'lucide-react';
 import { Link } from 'react-router';
 import { Avatar, Card, DemoDataTag } from '../../components/customer/CustomerPrimitives';
+import { AlertSoundToggle } from '../../components/customer/assessment/AlertSoundControls';
 import { demoCustomer } from '../../data/customerDemoData';
 
 const links = [
   { to: '/activity', label: 'Activity', description: 'Payments you have submitted for assessment', icon: ReceiptText },
   { to: '/system', label: 'System diagnostics', description: 'Check the connection to the PAYGUARD service', icon: MonitorCog },
+  { to: '/investigator', label: 'Fraud Intelligence Centre', description: 'Investigator workspace prototype (no access control)', icon: ScanEye },
 ];
 
 export function CustomerProfilePage() {
@@ -27,6 +29,17 @@ export function CustomerProfilePage() {
         This prototype uses a sample profile. No personal, bank or contact details are collected or
         stored.
       </p>
+
+      <Card aria-labelledby="alert-sound-heading" className="p-5 sm:p-6">
+        <h2 id="alert-sound-heading" className="text-base font-semibold text-ink">
+          Alert sounds
+        </h2>
+        <p className="mt-0.5 mb-4 text-sm leading-5 text-ink-muted">
+          Play a short warning sound when a new assessment finds high risk. Only this setting is
+          saved on this device.
+        </p>
+        <AlertSoundToggle showTest />
+      </Card>
 
       <Card aria-label="More">
         <ul className="divide-y divide-line">

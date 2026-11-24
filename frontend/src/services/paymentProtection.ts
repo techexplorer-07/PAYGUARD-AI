@@ -9,6 +9,7 @@ import type {
   PaymentProtectionResponse,
 } from '../types/paymentProtection';
 import { API_BASE_URL } from './api';
+import { parsePaymentProtectionResponse } from './paymentProtectionParser';
 
 export const PAYMENT_PROTECTION_ENDPOINT = `${API_BASE_URL}/api/v1/payment-protection/evaluate`;
 
@@ -41,17 +42,6 @@ function isValidationIssue(value: unknown): value is ApiValidationIssue {
   if (typeof value !== 'object' || value === null) return false;
   const issue = value as Record<string, unknown>;
   return Array.isArray(issue.loc) && typeof issue.msg === 'string';
-}
-
-export function isPaymentProtectionResponse(value: unknown): value is PaymentProtectionResponse {
-  if (typeof value !== 'object' || value === null) return false;
-  const body = value as Record<string, unknown>;
-  return (
-    typeof body.evaluation_id === 'string' &&
-    typeof body.timestamp === 'string' &&
-    typeof body.intervention_recommendation === 'object' &&
-    body.intervention_recommendation !== null
-  );
 }
 
 async function readJson(response: Response): Promise<unknown> {
@@ -88,10 +78,11 @@ export async function evaluatePayment(
   const body = await readJson(response);
 
   if (response.ok) {
-    if (!isPaymentProtectionResponse(body)) {
+    const parsed = parsePaymentProtectionResponse(body);
+    if (!parsed) {
       throw new PaymentProtectionApiError('invalid-response', 'The analysis service returned an unexpected response.', response.status);
     }
-    return body;
+    return parsed;
   }
 
   const detail = (body as { detail?: unknown } | null)?.detail;

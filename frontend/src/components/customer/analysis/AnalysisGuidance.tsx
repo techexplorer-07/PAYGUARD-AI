@@ -1,4 +1,5 @@
-import { Info } from 'lucide-react';
+import { FlaskConical, Info } from 'lucide-react';
+import { Link } from 'react-router';
 import { Card } from '../CustomerPrimitives';
 
 const steps = [
@@ -42,6 +43,13 @@ export function AnalysisGuidance() {
         <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
         This is a simulated assessment. PAYGUARD does not connect to your bank account or UPI app.
       </p>
+      <Link
+        to="/analyse/demo"
+        className="mt-4 inline-flex items-center gap-1.5 rounded text-sm font-medium text-primary hover:text-primary-hover"
+      >
+        <FlaskConical className="size-4" aria-hidden="true" />
+        See example results (demo)
+      </Link>
     </Card>
   );
 }
