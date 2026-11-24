@@ -3,28 +3,35 @@ import { fetchHealth, API_BASE_URL } from '../services/api';
 import type { HealthState, PhaseInfo } from '../types';
 
 export const LandingPage: React.FC = () => {
-  const [health, setHealth] = useState<HealthState>({ status: 'idle' });
+  // Starts in 'loading' because the initial probe runs on mount.
+  const [health, setHealth] = useState<HealthState>({ status: 'loading' });
 
-  const checkBackendHealth = async () => {
-    setHealth({ status: 'loading' });
+  const probeBackendHealth = async (): Promise<HealthState> => {
     try {
       const data = await fetchHealth();
-      setHealth({
-        status: 'healthy',
-        service: data.service,
-        lastChecked: new Date().toLocaleTimeString(),
-      });
+      return { status: 'healthy', service: data.service, lastChecked: new Date().toLocaleTimeString() };
     } catch (err: unknown) {
-      setHealth({
+      return {
         status: 'unreachable',
         lastChecked: new Date().toLocaleTimeString(),
         errorMessage: err instanceof Error ? err.message : 'Backend unreachable',
-      });
+      };
     }
   };
 
+  const checkBackendHealth = async () => {
+    setHealth({ status: 'loading' });
+    setHealth(await probeBackendHealth());
+  };
+
   useEffect(() => {
-    checkBackendHealth();
+    let active = true;
+    probeBackendHealth().then((result) => {
+      if (active) setHealth(result);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const phases: PhaseInfo[] = [
