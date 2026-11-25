@@ -30,10 +30,11 @@ def create_application() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # Enable CORS for local frontend integration
+    # Enable CORS for the local frontend and any deployed origins configured via environment
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.CORS_ORIGINS,
+        allow_origins=settings.allowed_origins,
+        allow_origin_regex=settings.CORS_ORIGIN_REGEX,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

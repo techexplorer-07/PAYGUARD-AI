@@ -1,6 +1,6 @@
 """Application configuration management using Pydantic Settings."""
 
-from typing import List
+from typing import List, Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,6 +19,18 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
         "http://localhost:3000",
     ]
+
+    # Deployment: extra allowed origins as a comma-separated list
+    # (e.g. "https://payguard-ai.vercel.app,https://payguard.tech"), appended to CORS_ORIGINS.
+    CORS_EXTRA_ORIGINS: str = ""
+    # Deployment: optional regex for additional origins, e.g. Vercel preview deployments
+    # r"https://payguard-ai(-[a-z0-9-]+)?\.vercel\.app".
+    CORS_ORIGIN_REGEX: Optional[str] = None
+
+    @property
+    def allowed_origins(self) -> List[str]:
+        extra = [origin.strip().rstrip("/") for origin in self.CORS_EXTRA_ORIGINS.split(",") if origin.strip()]
+        return [*self.CORS_ORIGINS, *(origin for origin in extra if origin not in self.CORS_ORIGINS)]
 
     # Server settings
     HOST: str = "127.0.0.1"
