@@ -88,6 +88,8 @@ backend/data/raw/
 backend/data/processed/
 backend/models/*.joblib
 backend/models/*.pkl
+# Small trained behaviour model used by the deployed API (~180 KB); datasets stay excluded.
+!backend/models/paysim_behavior_model.joblib
 
 # Temporary & scratch files
 tmp/
