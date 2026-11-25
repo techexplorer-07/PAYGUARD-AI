@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     HOST: str = "127.0.0.1"
     PORT: int = 8000
 
+    # Demo deployments: build the synthetic sample SPEG evidence graph at startup
+    # (see app/services/demo_graph_seed.py). Off by default.
+    SEED_DEMO_GRAPH: bool = False
+
     # PaySim Supervised Model settings
     PAYSIM_MODEL_ENABLED: bool = True
     PAYSIM_MODEL_PATH: str = "backend/models/paysim_behavior_model.joblib"

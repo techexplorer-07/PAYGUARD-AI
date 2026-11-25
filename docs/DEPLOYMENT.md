@@ -39,6 +39,7 @@ Order matters: deploy the backend first, because the frontend build needs the ba
 | `PYTHON_VERSION` | `3.11.9` | Matches local development |
 | `ENVIRONMENT` | `production` | |
 | `DEBUG` | `false` | Hides internal exception details from API responses |
+| `SEED_DEMO_GRAPH` | `true` | Loads the synthetic sample evidence graph at startup so recipient intelligence works live |
 
 ### 1.2 Check it
 
@@ -95,7 +96,10 @@ On the Vercel address, on a laptop and a phone:
 2. **Profile → System diagnostics** (`/system`) shows the backend as connected.
 3. **Analyse**: submit a suspicious message with a different UPI ID → a HIGH result and the warning sound.
 4. **Investigator** (`/investigator`): the header shows **Service online**; switch to **Demo dataset** and open the alert queue, an investigation and the evidence graph.
-5. Refresh on `/investigator/graph`: the page still loads.
+5. **Live recipient intelligence** (Session data): on **Analyse**, pay `sample-refund-desk@ybl` with a suspicious message → HIGH,
+   with the recipient engine contributing. Then in the investigator, open **Recipient intelligence** and look up
+   `sample-refund-desk@ybl` or `sample-kyc-update@ybl`, and view it in the **Evidence graph**.
+6. Refresh on `/investigator/graph`: the page still loads.
 
 ---
 
@@ -107,13 +111,23 @@ On the Vercel address, on a laptop and a phone:
 - **Memory resets on restart or sleep.** The SPEG evidence graph and the investigator's session records are in memory only.
 - Free-plan limits and policies change; check Render's and Vercel's current terms.
 
+## Demo evidence graph
+
+With `SEED_DEMO_GRAPH=true` the backend builds a synthetic graph (`SPEG-DEMO-INVESTIGATOR`, defined in
+`backend/app/services/demo_graph_seed.py`) at startup and makes it the default graph. All identifiers start with
+`sample`/`SAMPLE`; VERIFIED edges are created through the internal verification routine with the sample authority
+`SAMPLE_DEMO_AUTHORITY`. Sample recipients: `sample-refund-desk@ybl`, `sample-kyc-update@ybl`, `sample-new-seller@ybl`,
+`sample-mule@okicici`, `sample-other-seller@ybl`, `sample-landlord@okhdfc`, `sample-grocer@okaxis`.
+Other UPI IDs are reported as not found in the evidence graph. It is rebuilt on every restart.
+
 ## Known gap: PaySim model file
 
 The PaySim supervised behavioural model (`backend/models/paysim_behavior_model.joblib`) is git-ignored,
 so it is **not** deployed. The backend starts normally and logs
 `PaySim model artifact not found`; the supervised behavioural signal is then unavailable while every other engine works.
 To include it, the backend owner can commit the model file (if its size and licence allow) or host it elsewhere
-and point `PAYSIM_MODEL_PATH` at it. Locally, `backend/tests/test_paysim_behavior.py` needs this file to pass.
+and point `PAYSIM_MODEL_PATH` at it. The 10 tests in `backend/tests/test_paysim_behavior.py` that need the file are
+skipped (with a reason) when it is absent; the rest of the suite runs normally.
 
 ## Custom domain (later)
 

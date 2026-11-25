@@ -39,10 +39,27 @@ from app.services.paysim_behavior_service import (
     transform_paysim_features,
 )
 
+
+def _paysim_artifact_available() -> bool:
+    """The trained model file is git-ignored (see .gitignore), so it only exists where it was trained or copied."""
+    from app.services.paysim_behavior_service import PaySimModelManager
+
+    PaySimModelManager.reset_instance()
+    available = PaySimModelManager.get_instance().is_loaded
+    PaySimModelManager.reset_instance()
+    return available
+
+
+requires_paysim_artifact = pytest.mark.skipif(
+    not _paysim_artifact_available(),
+    reason="PaySim model artifact (backend/models/paysim_behavior_model.joblib) is not present; train it with backend/scripts/train_paysim.py",
+)
+
 client = TestClient(app)
 BASE_TIME = datetime(2026, 11, 25, 12, 0, tzinfo=timezone.utc)
 
 
+@requires_paysim_artifact
 def test_01_successful_model_loading():
     """Verify that the model manager loads the artifact and feature metadata properly."""
     manager = PaySimModelManager.get_instance()
@@ -54,6 +71,7 @@ def test_01_successful_model_loading():
     assert manager.load_error is None
 
 
+@requires_paysim_artifact
 def test_02_valid_transfer_prediction():
     """Verify inference for a TRANSFER transaction with complete account drainage."""
     # Classic PaySim fraud pattern: transfer draining entire account balance
@@ -73,6 +91,7 @@ def test_02_valid_transfer_prediction():
     assert result.feature_vector["amount_equals_balance"] == 1.0
 
 
+@requires_paysim_artifact
 def test_03_valid_cash_out_prediction():
     """Verify inference for CASH_OUT transaction."""
     result: PaySimPredictionResult = predict_paysim_fraud(
@@ -87,6 +106,7 @@ def test_03_valid_cash_out_prediction():
     assert result.feature_vector["type_CASH_OUT"] == 1.0
 
 
+@requires_paysim_artifact
 def test_04_zero_sender_balance():
     """Verify that zero sender balance is handled safely without division by zero."""
     result: PaySimPredictionResult = predict_paysim_fraud(
@@ -103,6 +123,7 @@ def test_04_zero_sender_balance():
     assert result.feature_vector["amount_to_balance_ratio"] == 10.0
 
 
+@requires_paysim_artifact
 def test_05_invalid_or_unsupported_transaction_type():
     """Verify that completely unsupported transaction types return a clean error without crashing."""
     result: PaySimPredictionResult = predict_paysim_fraud(
@@ -116,6 +137,7 @@ def test_05_invalid_or_unsupported_transaction_type():
     assert "Unsupported transaction type" in result.error_message
 
 
+@requires_paysim_artifact
 def test_06_missing_sender_balance():
     """Verify that missing sender_balance is handled gracefully without fabricating balances."""
     result: PaySimPredictionResult = predict_paysim_fraud(
@@ -129,6 +151,7 @@ def test_06_missing_sender_balance():
     assert "Sender pre-transaction balance is required" in result.error_message
 
 
+@requires_paysim_artifact
 def test_07_invalid_amount_or_negative_balance():
     """Verify that zero/negative amounts or negative sender balances are rejected."""
     # Negative amount
@@ -157,6 +180,7 @@ def test_08_missing_model_artifact_fallback():
     PaySimModelManager.reset_instance()
 
 
+@requires_paysim_artifact
 def test_09_model_prediction_exception_handling():
     """Verify that unexpected inference errors are caught and logged without raising exceptions."""
     manager = PaySimModelManager.get_instance()
@@ -222,6 +246,7 @@ def test_10_behavioural_engine_runs_when_paysim_disabled():
     PaySimModelManager.reset_instance()
 
 
+@requires_paysim_artifact
 def test_11_behavioural_endpoint_returns_paysim_signal():
     """Verify that POST /api/v1/behavioural/analyze returns PaySim prediction when available."""
     req = BehaviouralAnalysisRequest(
@@ -259,6 +284,7 @@ def test_11_behavioural_endpoint_returns_paysim_signal():
     assert "PAYSIM_SUPERVISED_FRAUD_PREDICTED" in data["detected_indicators"]
 
 
+@requires_paysim_artifact
 def test_12_payment_protection_orchestrator_incorporates_paysim():
     """Verify that payment protection orchestration passes sender_balance to PaySim model."""
     req = PaymentProtectionRequest(

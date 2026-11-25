@@ -19,6 +19,9 @@ services:
       # Hide internal exception details from API error responses.
       - key: DEBUG
         value: "false"
+      # Load the synthetic sample SPEG evidence graph so recipient intelligence works in the demo.
+      - key: SEED_DEMO_GRAPH
+        value: "true"
       # Set to the live frontend address after the Vercel deploy, e.g. https://payguard-ai.vercel.app
       - key: CORS_EXTRA_ORIGINS
         sync: false

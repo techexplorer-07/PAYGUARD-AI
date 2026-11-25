@@ -1,6 +1,7 @@
 """PAYGUARD AI - Main FastAPI Application."""
 
 from contextlib import asynccontextmanager
+import logging
 from typing import AsyncGenerator
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,12 +9,18 @@ from fastapi.responses import JSONResponse
 
 from app.api.routes import behavioural, correlation, health, payment_protection, recipient, unified_risk
 from app.core.config import settings
+from app.services.demo_graph_seed import seed_demo_graph
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan context manager for startup and shutdown events."""
     # Phase 1: Application initialization
+    if settings.SEED_DEMO_GRAPH:
+        try:
+            seed_demo_graph()
+        except Exception:  # A demo seed failure must never stop the API from starting.
+            logging.getLogger("payguard.startup").exception("Demo SPEG graph seeding failed; continuing without it.")
     yield
     # Phase 1: Application shutdown cleanup
 
