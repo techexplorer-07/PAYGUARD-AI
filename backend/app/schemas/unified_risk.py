@@ -128,6 +128,9 @@ class BehaviouralRiskSignal(BaseModel):
         default_factory=dict, description="Numerical contributions by behavioural feature"
     )
     explanation: List[str] = Field(default_factory=list, description="Explanatory notes from scorer")
+    paysim_prediction: Optional[Dict[str, Any]] = Field(
+        default=None, description="Supervised PaySim behavioral model output"
+    )
 
     @classmethod
     def from_behavioural_assessment(
@@ -142,6 +145,7 @@ class BehaviouralRiskSignal(BaseModel):
             detected_indicators=list(assessment.detected_indicators),
             feature_contributions=dict(assessment.feature_contributions),
             explanation=list(assessment.explanation),
+            paysim_prediction=assessment.paysim_prediction,
         )
 
 

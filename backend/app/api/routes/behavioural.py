@@ -9,6 +9,7 @@ from app.schemas.behavioural import (
 )
 from app.services.behavioural_feature_extractor import extract_behavioural_features
 from app.services.behavioural_risk_scorer import score_behavioural_risk
+from app.services.paysim_behavior_service import predict_paysim_fraud
 
 logger = logging.getLogger("payguard.behavioural")
 
@@ -51,10 +52,20 @@ async def analyze_behavioural_risk(request: BehaviouralAnalysisRequest) -> Behav
     # 1. Deterministic Feature Extraction
     features = extract_behavioural_features(request)
 
-    # 2. Explainable Anomaly Scoring
+    # 2. PaySim Supervised Model Signal (if pre-transaction balance provided or available)
+    curr_tx = request.current_transaction
+    sender_bal = float(curr_tx.sender_balance) if curr_tx.sender_balance is not None else None
+    paysim_res = predict_paysim_fraud(
+        amount=float(curr_tx.amount),
+        sender_balance=sender_bal,
+        transaction_type=curr_tx.payment_method,
+    )
+
+    # 3. Explainable Anomaly Scoring (combining heuristics with PaySim signal)
     assessment = score_behavioural_risk(
         features=features,
         transaction_id=request.current_transaction.transaction_id,
+        paysim_result=paysim_res.model_dump(),
     )
     return assessment
 

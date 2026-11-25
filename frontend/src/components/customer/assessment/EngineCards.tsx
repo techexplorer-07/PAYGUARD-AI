@@ -72,43 +72,43 @@ function SufficiencyNote({ sufficiency }: { sufficiency: SufficiencyView }) {
 }
 
 const comparisonStyles: Record<ComparisonState, { label: string; icon: LucideIcon; className: string }> = {
-  match: { label: 'Matches', icon: Equal, className: 'bg-success/10 text-success' },
-  mismatch: { label: 'Differs', icon: X, className: 'bg-danger/10 text-danger' },
-  'not-found': { label: 'Not in message', icon: CircleMinus, className: 'bg-muted text-ink-muted' },
-  uncertain: { label: 'Unclear', icon: CircleMinus, className: 'bg-muted text-ink' },
+  match: { label: 'Matches', icon: Equal, className: 'border border-emerald-200/80 bg-emerald-50 text-emerald-700' },
+  mismatch: { label: 'Differs', icon: X, className: 'border border-rose-200/80 bg-rose-50 text-rose-700' },
+  'not-found': { label: 'Not in message', icon: CircleMinus, className: 'border border-slate-200 bg-slate-50 text-slate-500' },
+  uncertain: { label: 'Unclear', icon: CircleMinus, className: 'border border-slate-200 bg-slate-50 text-slate-700' },
 };
 
 function ComparisonTable({ rows }: { rows: ComparisonRow[] }) {
   return (
-    <div className="rounded-lg border border-line">
-      <div className="hidden grid-cols-[6rem_minmax(0,1fr)_minmax(0,1fr)_7.5rem] gap-3 border-b border-line bg-muted/60 px-4 py-2 text-xs font-medium text-ink-muted sm:grid">
+    <div className="rounded-xl border border-slate-200/80 overflow-hidden shadow-2xs">
+      <div className="hidden grid-cols-[6rem_minmax(0,1fr)_minmax(0,1fr)_7.5rem] gap-3 border-b border-slate-200/80 bg-slate-50/80 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 sm:grid">
         <span>Detail</span>
         <span>In the message</span>
         <span>You entered</span>
         <span>Result</span>
       </div>
-      <ul className="divide-y divide-line">
+      <ul className="divide-y divide-slate-100 bg-white">
         {rows.map((row) => {
           const style = comparisonStyles[row.state];
           const Icon = style.icon;
           return (
             <li
               key={row.label}
-              className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 px-4 py-3 text-sm sm:grid-cols-[6rem_minmax(0,1fr)_minmax(0,1fr)_7.5rem] sm:items-center"
+              className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 px-4 py-3 text-sm sm:grid-cols-[6rem_minmax(0,1fr)_minmax(0,1fr)_7.5rem] sm:items-center hover:bg-slate-50/50 transition-colors"
             >
-              <span className="font-medium text-ink">{row.label}</span>
+              <span className="font-semibold text-slate-900">{row.label}</span>
               <span className="row-span-3 self-start justify-self-end sm:order-last sm:row-span-1 sm:justify-self-start">
-                <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-semibold ${style.className}`}>
-                  <Icon className="size-3.5" aria-hidden="true" />
+                <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-bold shadow-2xs ${style.className}`}>
+                  <Icon className="size-3.5" aria-hidden="true" strokeWidth={2.5} />
                   {style.label}
                 </span>
               </span>
-              <span className="min-w-0 break-all text-ink-muted sm:text-ink">
-                <span className="text-ink-muted sm:sr-only">Message: </span>
-                {row.requested ?? <span className="text-ink-muted">Not found</span>}
+              <span className="min-w-0 break-all text-slate-600 sm:text-slate-800 font-mono text-xs sm:text-sm">
+                <span className="text-slate-400 sm:sr-only">Message: </span>
+                {row.requested ?? <span className="text-slate-400 font-sans">Not found</span>}
               </span>
-              <span className="min-w-0 break-all text-ink-muted sm:text-ink">
-                <span className="text-ink-muted sm:sr-only">You entered: </span>
+              <span className="min-w-0 break-all text-slate-600 sm:text-slate-800 font-mono text-xs sm:text-sm">
+                <span className="text-slate-400 sm:sr-only">You entered: </span>
                 {row.entered}
               </span>
             </li>

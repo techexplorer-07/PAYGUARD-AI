@@ -16,11 +16,12 @@ const RECENT_LIMIT = 3;
 export function CustomerDashboard() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-[28px]">
+      <div className="relative overflow-hidden rounded-2xl border border-sky-100/80 bg-linear-to-r from-sky-50/40 via-white/80 to-indigo-50/30 p-6 backdrop-blur-md shadow-card">
+        <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-linear-to-bl from-sky-400/10 to-indigo-500/10 blur-2xl" />
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-[28px]">
           {getGreeting()}, {demoCustomer.displayName}
         </h1>
-        <p className="mt-1 text-sm text-ink-muted sm:text-base">Your payment safety, all in one place.</p>
+        <p className="mt-1 text-sm text-ink-muted sm:text-base">Your proactive payment protection intelligence centre.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">

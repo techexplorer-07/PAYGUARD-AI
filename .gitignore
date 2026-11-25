@@ -83,6 +83,12 @@ Thumbs.db
 *.sqlite3
 *.db
 
+# ML Datasets and Models
+backend/data/raw/
+backend/data/processed/
+backend/models/*.joblib
+backend/models/*.pkl
+
 # Temporary & scratch files
 tmp/
 temp/

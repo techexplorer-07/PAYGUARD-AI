@@ -78,6 +78,12 @@ class HistoricalTransaction(BaseModel):
         max_length=50,
         description="Payment rail or method used (e.g. UPI, CARD, NETBANKING)",
     )
+    sender_balance: Optional[Decimal] = Field(
+        default=None,
+        ge=Decimal("0.00"),
+        decimal_places=2,
+        description="Optional pre-transaction account balance of sender (used for PaySim supervised model)",
+    )
     transaction_timestamp: datetime = Field(
         ...,
         description="Timezone-aware timestamp when transaction was executed",
@@ -127,6 +133,12 @@ class CurrentTransaction(BaseModel):
         min_length=1,
         max_length=50,
         description="Payment rail or method used (e.g. UPI, CARD, NETBANKING)",
+    )
+    sender_balance: Optional[Decimal] = Field(
+        default=None,
+        ge=Decimal("0.00"),
+        decimal_places=2,
+        description="Optional pre-transaction account balance of sender (used for PaySim supervised model)",
     )
     transaction_timestamp: datetime = Field(
         ...,
@@ -388,6 +400,10 @@ class BehaviouralRiskAssessment(BaseModel):
     model_type: str = Field(
         default="deterministic_heuristic_anomaly_scorer (provisional v1)",
         description="Algorithm or scoring model specification",
+    )
+    paysim_prediction: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Supervised PaySim behavioral model output (probability, prediction, and metadata)",
     )
     assessment_timestamp: datetime = Field(
         ...,

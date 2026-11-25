@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { fetchHealth, API_BASE_URL } from '../services/api';
 import type { HealthState, PhaseInfo } from '../types';
+import { Activity, CheckCircle2, ShieldCheck, RefreshCw, Server } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  // Starts in 'loading' because the initial probe runs on mount.
   const [health, setHealth] = useState<HealthState>({ status: 'loading' });
 
   const probeBackendHealth = async (): Promise<HealthState> => {
@@ -43,111 +43,102 @@ export const LandingPage: React.FC = () => {
     },
     {
       phase: 2,
-      name: 'Intent & Scam Detection Engine',
-      status: 'planned',
-      description: 'Semantic intent scoring, urgency analysis, coercion heuristics, and composite risk assessment API.',
+      name: 'Intent & Behavioural Engine',
+      status: 'completed',
+      description: 'Linguistic intent extraction, robust z-score baseline scoring, and isolation forest anomaly benchmarks.',
     },
     {
       phase: 3,
-      name: 'Real-Time Payment Intervention',
-      status: 'planned',
-      description: 'Dynamic cognitive friction challenges, cooling-off modal flows, and interactive scam simulator.',
+      name: 'SPEG Graph & Recipient Risk',
+      status: 'completed',
+      description: 'MultiDiGraph evidence network, verified/reported trust boundaries, and recipient relationship scoring.',
     },
     {
       phase: 4,
-      name: 'Persistence & Compliance Audit',
-      status: 'planned',
-      description: 'PostgreSQL async storage, simulated transaction ledger, and immutable intervention audit trail.',
+      name: 'Unified Risk & Intervention',
+      status: 'completed',
+      description: 'Dynamic multi-stream weighted fusion, PAUSE_AND_VERIFY directives, and customer protection UI.',
     },
   ];
 
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="text-center space-y-6 pt-6 pb-2">
-        <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-cyan-950/60 text-cyan-400 border border-cyan-800/60 mb-2">
+    <div className="space-y-10">
+      {/* Hero Header */}
+      <section className="text-center space-y-4 pt-4 pb-2">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200">
+          <ShieldCheck className="size-3.5" aria-hidden="true" />
           <span>Visionet Talent Quest 2026 – Techthon Prototype</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto">
-          Intent-Aware Real-Time{' '}
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400 bg-clip-text text-transparent">
-            Scam Prevention
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-ink max-w-3xl mx-auto">
+          System Diagnostics &{' '}
+          <span className="text-primary">
+            Architecture Status
           </span>
         </h1>
 
-        <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          PAYGUARD AI analyzes the psychological and semantic intent behind payment requests
-          to stop Authorized Push Payment (APP) scams and coercion before funds leave the account.
+        <p className="text-sm sm:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed">
+          Verify runtime health, API connectivity, and modular pipeline status for PAYGUARD AI's intent, behavioural, and recipient graph intelligence engines.
         </p>
-
-        {/* Phase 1 Status Banner */}
-        <div className="max-w-xl mx-auto p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-left">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
-              Current Implementation Status
-            </span>
-            <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium">
-              Phase 1 Active
-            </span>
-          </div>
-          <p className="text-sm text-slate-300">
-            Application foundation and environment setup complete. Core fraud detection engine, database, and payment simulation modules will be introduced in subsequent phases per roadmap.
-          </p>
-        </div>
       </section>
 
       {/* Backend Health Check Widget */}
-      <section className="max-w-2xl mx-auto p-6 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <div>
-            <h2 className="text-base font-semibold text-white">System Diagnostics</h2>
-            <p className="text-xs text-slate-400">Verifying API communication with FastAPI backend</p>
+      <section className="max-w-2xl mx-auto p-6 rounded-2xl bg-surface border border-slate-200/90 shadow-card">
+        <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-9 items-center justify-center rounded-xl bg-sky-50 text-sky-700">
+              <Server className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <h2 className="text-base font-bold text-ink">API Gateway Health</h2>
+              <p className="text-xs text-ink-muted">Verifying communication with local FastAPI engine</p>
+            </div>
           </div>
           <button
             onClick={checkBackendHealth}
             disabled={health.status === 'loading'}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-surface hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
           >
-            {health.status === 'loading' ? 'Checking...' : 'Refresh Status'}
+            <RefreshCw className={`size-3.5 ${health.status === 'loading' ? 'animate-spin' : ''}`} aria-hidden="true" />
+            {health.status === 'loading' ? 'Probing...' : 'Refresh'}
           </button>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
-            <span className="text-xs text-slate-400 block mb-1">Backend Endpoint</span>
-            <span className="text-xs font-mono text-cyan-400 break-all">{API_BASE_URL}/health</span>
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Target Endpoint</span>
+            <span className="text-xs font-mono text-slate-800 break-all">{API_BASE_URL}/health</span>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80">
-            <span className="text-xs text-slate-400 block mb-1">Connection State</span>
+          <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/70">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">Connectivity Status</span>
             {health.status === 'healthy' && (
-              <span className="inline-flex items-center text-xs font-semibold text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>
-                Connected ({health.service})
+              <span className="inline-flex items-center text-xs font-bold text-emerald-700">
+                <CheckCircle2 className="size-4 mr-1.5 text-emerald-600" />
+                Online ({health.service})
               </span>
             )}
             {health.status === 'loading' && (
-              <span className="inline-flex items-center text-xs font-semibold text-amber-400">
-                <span className="w-2 h-2 rounded-full bg-amber-400 mr-2 animate-ping"></span>
-                Probing Backend...
+              <span className="inline-flex items-center text-xs font-bold text-amber-700">
+                <Activity className="size-4 mr-1.5 text-amber-600 animate-pulse" />
+                Probing Gateway...
               </span>
             )}
             {health.status === 'unreachable' && (
-              <span className="inline-flex items-center text-xs font-semibold text-rose-400">
-                <span className="w-2 h-2 rounded-full bg-rose-400 mr-2"></span>
-                Offline (Start backend at :8000)
+              <span className="inline-flex items-center text-xs font-bold text-rose-700">
+                <span className="size-2 rounded-full bg-rose-600 mr-2" />
+                Offline (:8000 unreachable)
               </span>
             )}
             {health.status === 'idle' && (
-              <span className="text-xs text-slate-400">Ready</span>
+              <span className="text-xs text-slate-500">Ready</span>
             )}
           </div>
         </div>
 
         {health.lastChecked && (
-          <p className="text-[11px] text-slate-400 mt-3 text-right">
-            Last diagnostic probe: {health.lastChecked}
+          <p className="text-[11px] text-slate-400 mt-4 text-right">
+            Last health probe: {health.lastChecked}
           </p>
         )}
       </section>
@@ -155,36 +146,26 @@ export const LandingPage: React.FC = () => {
       {/* Roadmap Architecture Cards */}
       <section className="space-y-4">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-white tracking-tight">Structured Development Roadmap</h2>
-          <p className="text-xs text-slate-400 mt-1">Modular staging for the Visionet Talent Quest prototype</p>
+          <h2 className="text-xl font-bold text-ink tracking-tight">Multi-Engine System Topology</h2>
+          <p className="text-xs text-ink-muted mt-1">Modular pipeline progression for Visionet Techthon 2026</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {phases.map((p) => (
             <div
               key={p.phase}
-              className={`p-5 rounded-xl border transition ${
-                p.status === 'completed'
-                  ? 'bg-slate-900/70 border-cyan-500/30'
-                  : 'bg-slate-900/30 border-slate-800/70 opacity-80'
-              }`}
+              className="p-5 rounded-2xl border border-slate-200/80 bg-surface shadow-card transition-all hover:shadow-card-hover"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono font-bold text-cyan-400">
+                <span className="text-xs font-mono font-bold text-primary">
                   PHASE 0{p.phase}
                 </span>
-                <span
-                  className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full ${
-                    p.status === 'completed'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700'
-                  }`}
-                >
+                <span className="inline-flex items-center text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                   {p.status}
                 </span>
               </div>
-              <h3 className="text-sm font-semibold text-white mb-2">{p.name}</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">{p.description}</p>
+              <h3 className="text-sm font-bold text-ink mb-1.5">{p.name}</h3>
+              <p className="text-xs leading-5 text-ink-muted">{p.description}</p>
             </div>
           ))}
         </div>

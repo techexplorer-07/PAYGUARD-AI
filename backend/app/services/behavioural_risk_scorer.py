@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone
 from decimal import Decimal
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import uuid
 
 from app.schemas.behavioural import (
@@ -31,6 +31,7 @@ THRESHOLD_MEDIUM_UPPER = Decimal("0.6500")  # [0.3000, 0.6500) -> MEDIUM
 def score_behavioural_risk(
     features: BehaviouralFeatureSet,
     transaction_id: Optional[str] = None,
+    paysim_result: Optional[Dict[str, Any]] = None,
 ) -> BehaviouralRiskAssessment:
     """Evaluate deterministic, explainable behavioural anomaly rules on extracted features.
 
@@ -295,6 +296,23 @@ def score_behavioural_risk(
                 "(e.g. novel beneficiary paired with extreme amount deviation or velocity acceleration).",
             )
 
+    # Append PaySim supervised model signal explanation if present
+    if paysim_result and paysim_result.get("model_available"):
+        fraud_prob = paysim_result.get("fraud_probability")
+        is_fraud = paysim_result.get("is_fraud_predicted")
+        if fraud_prob is not None:
+            if is_fraud:
+                detected_indicators.append("PAYSIM_SUPERVISED_FRAUD_PREDICTED")
+                explanations.append(
+                    f"PaySim Supervised Model: High fraud probability detected ({fraud_prob:.4f} >= threshold {paysim_result.get('threshold', 0.5):.2f})."
+                )
+            else:
+                explanations.append(
+                    f"PaySim Supervised Model: Low fraud probability detected ({fraud_prob:.4f} < threshold {paysim_result.get('threshold', 0.5):.2f})."
+                )
+        elif paysim_result.get("error_message"):
+            explanations.append(f"PaySim Supervised Model note: {paysim_result.get('error_message')}")
+
     return BehaviouralRiskAssessment(
         assessment_id=f"ASM-{uuid.uuid4().hex[:12].upper()}",
         customer_id=features.customer_id,
@@ -306,5 +324,6 @@ def score_behavioural_risk(
         explanation=explanations,
         data_sufficiency=features.data_sufficiency,
         model_type="deterministic_heuristic_anomaly_scorer (provisional v1)",
+        paysim_prediction=paysim_result,
         assessment_timestamp=datetime.now(timezone.utc),
     )

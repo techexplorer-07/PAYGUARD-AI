@@ -1,8 +1,8 @@
 # PAYGUARD AI — Development Plan
 
-**Project:** PAYGUARD AI  
-**Competition:** Visionet Talent Quest 2026 – Techthon  
-**Product:** Intent-Aware Real-Time Financial Scam Prevention and Payment Intervention System  
+- **Project:** PAYGUARD AI
+- **Competition:** Visionet Talent Quest 2026 – Techthon
+- **Product:** Intent-Aware Real-Time Financial Scam Prevention and Payment Intervention System
 
 ---
 
@@ -22,8 +22,8 @@ flowchart LR
 
 ## Phase 1: Project Architecture, Environment Setup & Application Foundation (CURRENT)
 
-**Status:** Completed  
-**Objective:** Establish production-ready project topology, configure modern development environments for React/Vite/Tailwind and FastAPI, and deliver verifiable health diagnostics.
+- **Status:** Completed
+- **Objective:** Establish production-ready project topology, configure modern development environments for React/Vite/Tailwind and FastAPI, and deliver verifiable health diagnostics.
 
 - [x] Inspect local runtime environment (Node.js, npm, Python, Git).
 - [x] Scaffold structured repository topology (`frontend/`, `backend/`, `docs/`, `data/synthetic/`).
@@ -41,8 +41,8 @@ flowchart LR
 
 ## Phase 2: Intent-Aware Scam Detection Engine
 
-**Status:** Planned (Requires Phase 1 signoff)  
-**Objective:** Develop the core semantic intent analysis and scam probability scoring logic.
+- **Status:** Planned (Requires Phase 1 signoff)
+- **Objective:** Develop the core semantic intent analysis and scam probability scoring logic.
 
 - [ ] Define synthetic scam taxonomy:
   - Impersonation (Executive/Bank official/Government authority)
@@ -63,8 +63,8 @@ flowchart LR
 
 ## Phase 3: Real-Time Payment Intervention & Dynamic Friction UI
 
-**Status:** Planned  
-**Objective:** Transform passive detection into active scam disruption through contextual interventions.
+- **Status:** Planned
+- **Objective:** Transform passive detection into active scam disruption through contextual interventions.
 
 - [ ] Implement adaptive friction framework in frontend:
   - Low Risk: Frictionless standard approval flow
@@ -80,8 +80,8 @@ flowchart LR
 
 ## Phase 4: Data Persistence, PostgreSQL Integration & Audit Logging
 
-**Status:** Planned  
-**Objective:** Integrate relational persistence for simulated transactions and compliance audit logs.
+- **Status:** Planned
+- **Objective:** Integrate relational persistence for simulated transactions and compliance audit logs.
 
 - [ ] Configure PostgreSQL database connection using SQLAlchemy 2.0 (asyncpg) and Alembic.
 - [ ] Implement database schemas:
@@ -96,8 +96,8 @@ flowchart LR
 
 ## Phase 5: Verification, Benchmarking & Demo Hardening
 
-**Status:** Planned  
-**Objective:** Validate end-to-end performance, accuracy on synthetic benchmarks, and polish prototype demonstration.
+- **Status:** Planned
+- **Objective:** Validate end-to-end performance, accuracy on synthetic benchmarks, and polish prototype demonstration.
 
 - [ ] Run benchmark evaluation against synthetic dataset:
   - Measure true positive rate, false positive rate, and latency.

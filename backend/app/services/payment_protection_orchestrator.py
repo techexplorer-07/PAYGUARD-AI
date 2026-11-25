@@ -46,6 +46,7 @@ from app.schemas.unified_risk import (
 )
 from app.services.behavioural_feature_extractor import extract_behavioural_features
 from app.services.behavioural_risk_scorer import score_behavioural_risk
+from app.services.paysim_behavior_service import predict_paysim_fraud
 from app.services.correlation_engine import compare_intent_to_transaction
 from app.services.intent_extractor import extract_payment_intent
 from app.services.recipient_relationship_analyzer import analyze_recipient_relationships
@@ -321,6 +322,7 @@ def orchestrate_payment_protection(request: PaymentProtectionRequest) -> Payment
             currency=request.simulated_transaction.currency,
             beneficiary_id=recipient_id,
             payment_method=request.payment_method or "UPI",
+            sender_balance=request.sender_balance,
             transaction_timestamp=eval_time,
         )
         behav_req = BehaviouralAnalysisRequest(
@@ -329,7 +331,17 @@ def orchestrate_payment_protection(request: PaymentProtectionRequest) -> Payment
             historical_transactions=request.historical_transactions,
         )
         features = extract_behavioural_features(behav_req)
-        behav_resp = score_behavioural_risk(features=features, transaction_id=tx_id)
+        sender_bal = float(request.sender_balance) if request.sender_balance is not None else None
+        paysim_res = predict_paysim_fraud(
+            amount=float(request.simulated_transaction.amount),
+            sender_balance=sender_bal,
+            transaction_type=request.payment_method or "UPI",
+        )
+        behav_resp = score_behavioural_risk(
+            features=features,
+            transaction_id=tx_id,
+            paysim_result=paysim_res.model_dump(),
+        )
         behav_signal = BehaviouralRiskSignal.from_behavioural_assessment(behav_resp)
 
     # -------------------------------------------------------------------------

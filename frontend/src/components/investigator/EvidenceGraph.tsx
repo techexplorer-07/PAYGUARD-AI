@@ -148,18 +148,18 @@ export function EvidenceGraph({ model, selection, onSelect }: EvidenceGraphProps
 
   return (
     <div className="relative">
-      <div className="absolute right-3 top-3 z-10 flex flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-card">
-        <button type="button" onClick={() => zoom(1.25)} aria-label="Zoom in" className="flex size-10 cursor-pointer items-center justify-center text-ink hover:bg-muted">
+      <div className="absolute right-3.5 top-3.5 z-10 flex flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-surface/95 backdrop-blur-md shadow-card ring-1 ring-slate-900/5">
+        <button type="button" onClick={() => zoom(1.25)} aria-label="Zoom in" className="flex size-10 cursor-pointer items-center justify-center text-slate-700 hover:bg-slate-100 hover:text-slate-950 transition-colors">
           <ZoomIn className="size-4" aria-hidden="true" />
         </button>
-        <button type="button" onClick={() => zoom(0.8)} aria-label="Zoom out" className="flex size-10 cursor-pointer items-center justify-center border-t border-line text-ink hover:bg-muted">
+        <button type="button" onClick={() => zoom(0.8)} aria-label="Zoom out" className="flex size-10 cursor-pointer items-center justify-center border-t border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-950 transition-colors">
           <ZoomOut className="size-4" aria-hidden="true" />
         </button>
         <button
           type="button"
           onClick={() => setView({ x: 0, y: 0, scale: 1 })}
           aria-label="Reset view"
-          className="flex size-10 cursor-pointer items-center justify-center border-t border-line text-ink hover:bg-muted"
+          className="flex size-10 cursor-pointer items-center justify-center border-t border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-950 transition-colors"
         >
           <Maximize className="size-4" aria-hidden="true" />
         </button>
