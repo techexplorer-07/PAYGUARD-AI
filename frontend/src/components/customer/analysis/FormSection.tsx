@@ -13,22 +13,22 @@ interface FormSectionProps {
 export function FormSection({ id, step, title, description, children }: FormSectionProps) {
   const headingId = `${id}-heading`;
   return (
-    <Card aria-labelledby={headingId} className="p-5 sm:p-6">
-      <div className="flex items-start gap-3">
+    <Card aria-labelledby={headingId} className="p-5 sm:p-7 bg-surface shadow-xs">
+      <div className="flex items-start gap-3.5">
         <span
-          className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
+          className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-linear-to-tr from-sky-600 to-cyan-500 text-xs font-bold text-white shadow-2xs"
           aria-hidden="true"
         >
           {step}
         </span>
         <div className="min-w-0">
-          <h2 id={headingId} className="text-base font-semibold text-ink">
+          <h2 id={headingId} className="text-base font-bold tracking-tight text-ink sm:text-lg">
             {title}
           </h2>
-          <p className="mt-0.5 text-sm text-ink-muted">{description}</p>
+          <p className="mt-0.5 text-xs sm:text-sm text-ink-muted">{description}</p>
         </div>
       </div>
-      <div className="mt-5">{children}</div>
+      <div className="mt-5 sm:mt-6">{children}</div>
     </Card>
   );
 }

@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     HOST: str = "127.0.0.1"
     PORT: int = 8000
 
+    # PaySim Supervised Model settings
+    PAYSIM_MODEL_ENABLED: bool = True
+    PAYSIM_MODEL_PATH: str = "backend/models/paysim_behavior_model.joblib"
+    PAYSIM_MODEL_THRESHOLD: float = 0.5
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

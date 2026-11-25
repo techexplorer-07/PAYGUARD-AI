@@ -36,6 +36,7 @@ from app.schemas.unified_risk import (
 )
 from app.services.behavioural_feature_extractor import extract_behavioural_features
 from app.services.behavioural_risk_scorer import score_behavioural_risk
+from app.services.paysim_behavior_service import predict_paysim_fraud
 from app.services.correlation_engine import compare_intent_to_transaction
 from app.services.intent_extractor import extract_payment_intent
 from app.services.recipient_relationship_analyzer import analyze_recipient_relationships
@@ -152,6 +153,20 @@ def synthesize_unified_assessment(
         }
         for ind in behavioural_signal.detected_indicators:
             detected_indicators_set.add(f"BEHAVIOURAL_{ind}")
+        if behavioural_signal.paysim_prediction and behavioural_signal.paysim_prediction.get("model_available"):
+            ps = behavioural_signal.paysim_prediction
+            if ps.get("is_fraud_predicted"):
+                detected_indicators_set.add("BEHAVIOURAL_PAYSIM_SUPERVISED_FRAUD_ALERT")
+            if ps.get("fraud_probability") is not None:
+                supporting_evidence_items.append(
+                    UnifiedEvidenceItem(
+                        engine_source="BEHAVIOURAL",
+                        evidence_id="FEAT-PAYSIM-SUPERVISED",
+                        epistemic_status="STATISTICAL",
+                        source_reference="PAYSIM_HIST_GRADIENT_BOOSTING",
+                        description=f"PaySim supervised fraud probability {ps.get('fraud_probability'):.4f} (threshold {ps.get('threshold', 0.5):.2f})",
+                    )
+                )
         for k, v in behavioural_signal.feature_contributions.items():
             supporting_evidence_items.append(
                 UnifiedEvidenceItem(
@@ -513,7 +528,18 @@ def evaluate_unified_risk(request: UnifiedEvaluationRequest) -> UnifiedRiskAsses
     if behavioural_signal is None and request.behavioural_request is not None:
         try:
             features = extract_behavioural_features(request.behavioural_request)
-            assessment = score_behavioural_risk(features)
+            curr_tx = request.behavioural_request.current_transaction
+            sender_bal = float(curr_tx.sender_balance) if curr_tx.sender_balance is not None else None
+            paysim_res = predict_paysim_fraud(
+                amount=float(curr_tx.amount),
+                sender_balance=sender_bal,
+                transaction_type=curr_tx.payment_method,
+            )
+            assessment = score_behavioural_risk(
+                features=features,
+                transaction_id=curr_tx.transaction_id,
+                paysim_result=paysim_res.model_dump(),
+            )
             behavioural_signal = BehaviouralRiskSignal.from_behavioural_assessment(assessment)
         except Exception as e:
             logger.warning("On-the-fly behavioural evaluation failed: %s", str(e))

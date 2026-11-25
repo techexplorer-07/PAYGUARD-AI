@@ -11,8 +11,8 @@ export function EvaluationItem({ record }: { record: EvaluationRecord }) {
         to={`/activity/${record.id}`}
         className="group flex items-center gap-3 px-4 py-4 transition-colors hover:bg-muted/60 focus-visible:-outline-offset-2 sm:gap-4 sm:px-6"
       >
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-ink-muted">
-          <ArrowUpRight className="size-5" aria-hidden="true" />
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition-colors group-hover:bg-sky-50 group-hover:text-sky-700">
+          <ArrowUpRight className="size-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
         </span>
 
         <div className="min-w-0 flex-1">

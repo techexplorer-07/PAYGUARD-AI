@@ -118,6 +118,12 @@ class PaymentProtectionRequest(BaseModel):
         max_length=50,
         description="Payment rail or method used (defaults to 'UPI').",
     )
+    sender_balance: Optional[Decimal] = Field(
+        default=None,
+        ge=Decimal("0.00"),
+        decimal_places=2,
+        description="Optional pre-transaction account balance of sender (used for PaySim supervised model).",
+    )
     graph_id: Optional[str] = Field(
         default=None,
         description="Optional specific SPEG graph instance ID in memory to query for recipient intelligence.",

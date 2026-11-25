@@ -57,7 +57,12 @@ export function InvestigatorLayout() {
 
   return (
     <InvestigatorDataContext.Provider value={data}>
-      <div className="min-h-screen bg-canvas text-ink">
+      <div className="relative min-h-screen bg-canvas text-ink">
+        {/* Option A: Atmospheric ambient lighting mesh */}
+        <div
+          className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_60%_-10%,rgba(2,132,199,0.08),rgba(255,255,255,0))] blur-2xl"
+          aria-hidden="true"
+        />
         <a
           href="#investigator-main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[60] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-popover"
@@ -66,7 +71,7 @@ export function InvestigatorLayout() {
         </a>
 
         {/* Desktop sidebar */}
-        <div className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-line bg-surface lg:block">
+        <div className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-slate-200/80 bg-white/85 backdrop-blur-md lg:block">
           <InvestigatorSidebar />
         </div>
 
@@ -91,7 +96,7 @@ export function InvestigatorLayout() {
         )}
 
         <div className="lg:pl-64">
-          <header className="sticky top-0 z-20 border-b border-line bg-surface">
+          <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 backdrop-blur-md">
             <div className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 sm:px-6">
               <button
                 ref={menuButtonRef}

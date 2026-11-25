@@ -17,17 +17,17 @@ interface InvestigatorSidebarProps {
 
 export function InvestigatorSidebar({ onNavigate, onClose }: InvestigatorSidebarProps) {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-surface">
       <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-4">
-        <Link to="/investigator/overview" onClick={onNavigate} className="flex min-w-0 items-center gap-2.5 rounded-md">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
-            <ShieldCheck className="size-[18px]" aria-hidden="true" strokeWidth={2.25} />
+        <Link to="/investigator/overview" onClick={onNavigate} className="group flex min-w-0 items-center gap-2.5 rounded-lg">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-tr from-sky-600 to-cyan-500 text-white shadow-xs group-hover:scale-105 transition-transform duration-150">
+            <ShieldCheck className="size-5" aria-hidden="true" strokeWidth={2.25} />
           </span>
           <span className="min-w-0">
             <span className="block text-[15px] font-bold leading-5 tracking-tight text-ink">
               PAYGUARD <span className="font-semibold text-primary">AI</span>
             </span>
-            <span className="block text-xs font-medium text-ink-muted">Fraud Intelligence Centre</span>
+            <span className="block text-xs font-semibold text-sky-700">Fraud Intelligence Centre</span>
           </span>
         </Link>
         {onClose && (
@@ -43,7 +43,7 @@ export function InvestigatorSidebar({ onNavigate, onClose }: InvestigatorSidebar
         )}
       </div>
 
-      <nav aria-label="Investigator" className="flex-1 overflow-y-auto px-3 py-4">
+      <nav aria-label="Investigator" className="flex-1 overflow-y-auto px-3.5 py-4">
         <ul className="space-y-1">
           {navItems.map(({ to, label, icon: Icon }) => (
             <li key={to}>
@@ -51,12 +51,14 @@ export function InvestigatorSidebar({ onNavigate, onClose }: InvestigatorSidebar
                 to={to}
                 onClick={onNavigate}
                 className={({ isActive }) =>
-                  `flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors ${
-                    isActive ? 'bg-primary/10 text-primary' : 'text-ink-muted hover:bg-muted hover:text-ink'
+                  `group flex min-h-10 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-all ${
+                    isActive
+                      ? 'bg-sky-50 text-sky-800 shadow-2xs border border-sky-200/80'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
                   }`
                 }
               >
-                <Icon className="size-[18px] shrink-0" aria-hidden="true" />
+                <Icon className="size-4.5 shrink-0 transition-colors" aria-hidden="true" />
                 {label}
               </NavLink>
             </li>
@@ -66,21 +68,21 @@ export function InvestigatorSidebar({ onNavigate, onClose }: InvestigatorSidebar
 
       <div className="space-y-3 border-t border-line px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-ink-muted">
-            <UserCog className="size-[18px]" aria-hidden="true" />
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600 ring-1 ring-slate-900/5">
+            <UserCog className="size-4.5" aria-hidden="true" />
           </span>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-ink">Prototype analyst</p>
-            <p className="text-xs text-ink-muted">Not signed in · no roles</p>
+            <p className="text-sm font-semibold text-ink">Prototype analyst</p>
+            <p className="text-xs text-ink-muted">Fraud Intelligence Workspace</p>
           </div>
         </div>
         <Link
           to="/"
           onClick={onNavigate}
-          className="inline-flex items-center gap-1.5 rounded text-xs font-medium text-primary hover:text-primary-hover"
+          className="inline-flex items-center gap-1.5 rounded-md text-xs font-semibold text-primary hover:text-primary-hover transition-colors"
         >
           <ArrowLeft className="size-3.5" aria-hidden="true" />
-          Customer app
+          Return to Customer App
         </Link>
       </div>
     </div>

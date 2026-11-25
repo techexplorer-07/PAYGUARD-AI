@@ -9,7 +9,7 @@ import { customerNavItems } from './customerUi';
 
 export function CustomerHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface">
+    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-surface/90 backdrop-blur-md transition-shadow">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <BrandLink />
 
@@ -21,10 +21,10 @@ export function CustomerHeader() {
                   to={item.to}
                   end={item.end}
                   className={({ isActive }) =>
-                    `-mb-px flex items-center border-b-2 px-3 text-sm font-medium transition-colors ${
+                    `-mb-px flex items-center border-b-2 px-3 text-sm transition-colors ${
                       isActive
-                        ? 'border-primary text-primary'
-                        : 'border-transparent text-ink-muted hover:text-ink'
+                        ? 'border-primary text-primary font-semibold'
+                        : 'border-transparent text-ink-muted hover:text-ink hover:border-slate-300 font-medium'
                     }`
                   }
                 >
@@ -35,7 +35,7 @@ export function CustomerHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2.5">
           <NotificationsMenu />
           <ProfileMenu />
         </div>
@@ -46,9 +46,9 @@ export function CustomerHeader() {
 
 function BrandLink() {
   return (
-    <Link to="/" className="flex shrink-0 items-center gap-2.5 rounded-md" aria-label="PAYGUARD AI home">
-      <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-white">
-        <ShieldCheck className="size-[18px]" aria-hidden="true" strokeWidth={2.25} />
+    <Link to="/" className="group flex shrink-0 items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20" aria-label="PAYGUARD AI home">
+      <span className="flex size-9 items-center justify-center rounded-xl bg-linear-to-tr from-sky-600 to-cyan-500 text-white shadow-xs transition-transform duration-150 group-hover:scale-105">
+        <ShieldCheck className="size-5" aria-hidden="true" strokeWidth={2.25} />
       </span>
       <span className="text-[17px] font-bold tracking-tight text-ink">
         PAYGUARD <span className="font-semibold text-primary">AI</span>
@@ -100,7 +100,7 @@ function HeaderDropdown({ label, trigger, triggerClassName, panelClassName = '',
       {open && (
         <div
           id={panelId}
-          className={`fixed inset-x-4 top-[4.5rem] z-50 rounded-xl border border-line bg-surface shadow-popover sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 ${panelClassName}`}
+          className={`fixed inset-x-4 top-[4.5rem] z-50 rounded-2xl border border-slate-200/90 bg-surface shadow-popover ring-1 ring-slate-900/5 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2.5 ${panelClassName}`}
         >
           {children(close)}
         </div>

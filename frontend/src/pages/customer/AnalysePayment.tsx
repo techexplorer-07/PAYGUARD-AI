@@ -10,6 +10,27 @@ import { paymentFieldIds, usePaymentAnalysisForm } from '../../hooks/usePaymentA
 
 const STATUS_ID = 'analysis-submit-status';
 
+const quickScenarios = [
+  {
+    label: '⚡ Electricity Impostor',
+    message: 'URGENT: Pay Rs 8500 to powerhelp@upi for your electricity bill before 5 PM to avoid power cut.',
+    amount: '8500',
+    recipient: 'scam_collector@attacker',
+  },
+  {
+    label: '⚡ Regular Utility Bill',
+    message: 'Please transfer Rs 500 to grocery@okaxis for weekly groceries.',
+    amount: '500',
+    recipient: 'grocery@okaxis',
+  },
+  {
+    label: '⚡ Courier Fee Demand',
+    message: 'Pay Rs 1250 to customs_clear@upi immediately to release your parcel.',
+    amount: '1250',
+    recipient: 'customs_clear@upi',
+  },
+];
+
 export function AnalysePayment() {
   const { values, setField, markTouched, errorFor, isComplete, isSubmitting, submission, handleSubmit } =
     usePaymentAnalysisForm();
@@ -26,22 +47,43 @@ export function AnalysePayment() {
     <div className="space-y-6">
       <Link
         to="/"
-        className="inline-flex items-center gap-1.5 rounded text-sm font-medium text-primary hover:text-primary-hover"
+        className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold text-primary hover:text-primary-hover transition-colors"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
         Back to dashboard
       </Link>
 
       <div className="max-w-2xl">
-        <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-[28px]">Analyse a payment</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">Analyse a payment</h1>
         <p className="mt-1.5 text-sm leading-6 text-ink-muted sm:text-base">
           Review a payment request before proceeding. PAYGUARD analyses the message context,
           transaction behaviour and recipient risk indicators.
         </p>
-        <p className="mt-3 inline-flex items-start gap-1.5 rounded-md bg-success/10 px-2.5 py-1 text-xs font-medium leading-5 text-success">
-          <LockKeyhole className="mt-[3px] size-3.5 shrink-0" aria-hidden="true" />
-          Your information is analysed only after your consent.
-        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <p className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 shadow-2xs">
+            <LockKeyhole className="size-3.5 shrink-0" aria-hidden="true" />
+            Your information is analysed only after your consent.
+          </p>
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Quick fill:</span>
+          {quickScenarios.map((s) => (
+            <button
+              key={s.label}
+              type="button"
+              onClick={() => {
+                setField('message', s.message);
+                setField('amount', s.amount);
+                setField('recipient', s.recipient);
+                setField('consent', true);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200/90 bg-white/80 backdrop-blur-xs px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-2xs hover:border-sky-300 hover:bg-sky-50/60 hover:text-sky-900 transition-all cursor-pointer active:scale-95"
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">

@@ -11,15 +11,15 @@ interface OverviewMetricCardProps {
 
 export function OverviewMetricCard({ label, value, icon: Icon, iconClass, hint }: OverviewMetricCardProps) {
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
+    <div className="rounded-2xl border border-slate-200/80 bg-surface p-4 sm:p-5 shadow-card transition-all hover:shadow-card-hover hover:border-slate-300">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-xs font-medium text-ink-muted">{label}</p>
-        <span className={`flex size-8 items-center justify-center rounded-lg ${iconClass}`}>
-          <Icon className="size-4" aria-hidden="true" />
+        <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+        <span className={`flex size-9 items-center justify-center rounded-xl shadow-2xs ${iconClass}`}>
+          <Icon className="size-4.5" aria-hidden="true" strokeWidth={2} />
         </span>
       </div>
-      <p className="mt-2 text-2xl font-bold tabular-nums text-ink">{value}</p>
-      <p className="mt-0.5 text-xs leading-4 text-ink-muted">{hint}</p>
+      <p className="mt-2.5 text-2xl font-extrabold tracking-tight tabular-nums text-slate-900 sm:text-3xl">{value}</p>
+      <p className="mt-1 text-xs leading-4 text-slate-500">{hint}</p>
     </div>
   );
 }

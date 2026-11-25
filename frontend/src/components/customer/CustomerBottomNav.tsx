@@ -5,7 +5,7 @@ export function CustomerBottomNav() {
   return (
     <nav
       aria-label="Primary"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/80 bg-surface/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden shadow-lg"
     >
       <ul className="grid grid-cols-4">
         {customerNavItems.map(({ to, label, icon: Icon, end }) => (
@@ -14,18 +14,20 @@ export function CustomerBottomNav() {
               to={to}
               end={end}
               className={({ isActive }) =>
-                `relative flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${
-                  isActive ? 'text-primary' : 'text-ink-muted hover:text-ink'
+                `relative flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-medium transition-all ${
+                  isActive ? 'text-primary font-semibold' : 'text-ink-muted hover:text-ink'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   <span
-                    className={`absolute inset-x-6 top-0 h-0.5 rounded-b ${isActive ? 'bg-primary' : 'bg-transparent'}`}
+                    className={`absolute inset-x-5 top-0 h-0.75 rounded-b-full transition-all ${isActive ? 'bg-primary' : 'bg-transparent'}`}
                     aria-hidden="true"
                   />
-                  <Icon className="size-[22px]" aria-hidden="true" strokeWidth={isActive ? 2.25 : 1.75} />
+                  <span className={`flex size-8 items-center justify-center rounded-xl transition-colors ${isActive ? 'bg-primary/10' : ''}`}>
+                    <Icon className="size-5" aria-hidden="true" strokeWidth={isActive ? 2.25 : 1.75} />
+                  </span>
                   {label}
                 </>
               )}

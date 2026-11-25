@@ -1,9 +1,9 @@
 # PAYGUARD AI — System Architecture
 
-**Document Version:** 1.0.0  
-**Phase:** Phase 1 — Project Architecture, Environment Setup & Application Foundation  
-**System Classification:** Fintech Fraud Prevention & Payment Intervention Prototype  
-**Target:** Visionet Talent Quest 2026 – Techthon  
+- **Document Version:** 1.0.0
+- **Phase:** Phase 1 — Project Architecture, Environment Setup & Application Foundation
+- **System Classification:** Fintech Fraud Prevention & Payment Intervention Prototype
+- **Target:** Visionet Talent Quest 2026 – Techthon
 
 ---
 
